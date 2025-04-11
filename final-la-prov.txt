@@ -1,0 +1,117 @@
+import zipfile
+import os
+
+# Préparation du dossier du site
+site_folder = "/mnt/data/la_providence_site"
+os.makedirs(site_folder, exist_ok=True)
+
+# Fichiers essentiels pour un site professionnel simple (HTML, CSS, JS)
+index_html = """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Providence - Quincaillerie</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo La Providence" class="logo">
+        <h1>Bienvenue chez La Providence</h1>
+        <p>Quincaillerie à Goma – Avenue du marché</p>
+    </header>
+    <section class="hero">
+        <h2>Tout pour la construction, l’électricité et la domotique</h2>
+        <p>Outils, jiprok, objets connectés, et bien plus encore…</p>
+    </section>
+    <section class="contact">
+        <h3>Contact</h3>
+        <p>Email : <a href="mailto:nynagearsene@gmail.com">nynagearsene@gmail.com</a></p>
+        <p>Téléphone : <a href="tel:+243990240404">+243990240404</a> / <a href="tel:+243847707908">+243847707908</a></p>
+        <p>Adresse : Avenue du marché, Goma ville</p>
+    </section>
+    <footer>
+        <p>&copy; 2025 La Providence. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
+"""
+
+style_css = """
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f0f4fa;
+    color: #333;
+}
+
+header {
+    background: #0066cc;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+}
+
+.hero {
+    text-align: center;
+    padding: 2rem;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.contact {
+    background: #e6f0ff;
+    padding: 2rem;
+    margin: 2rem;
+    border-radius: 10px;
+}
+
+footer {
+    background: #003366;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+"""
+
+script_js = """
+console.log("Bienvenue chez La Providence !");
+"""
+
+# Écriture des fichiers
+with open(os.path.join(site_folder, "index.html"), "w", encoding="utf-8") as f:
+    f.write(index_html)
+with open(os.path.join(site_folder, "style.css"), "w", encoding="utf-8") as f:
+    f.write(style_css)
+with open(os.path.join(site_folder, "script.js"), "w", encoding="utf-8") as f:
+    f.write(script_js)
+
+# Utiliser le logo fourni précédemment (image ID: file_00000000fae06230b170b3335920c3c6)
+logo_path = "/mnt/data/A_logo_for_a_company_named_\"La_Providence\"_is_set_.png"
+logo_target = os.path.join(site_folder, "logo.png")
+if os.path.exists(logo_path):
+    os.rename(logo_path, logo_target)
+
+# Création du fichier zip
+zip_path = "/mnt/data/la_providence_site.zip"
+with zipfile.ZipFile(zip_path, "w") as zipf:
+    for foldername, subfolders, filenames in os.walk(site_folder):
+        for filename in filenames:
+            file_path = os.path.join(foldername, filename)
+            arcname = os.path.relpath(file_path, site_folder)
+            zipf.write(file_path, arcname)
+
+zip_path
