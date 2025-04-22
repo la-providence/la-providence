@@ -1,106 +1,195 @@
+from zipfile import ZipFile
 import os
-import zipfile
 
-# Création des dossiers
-project_dir = "/mnt/data/la_providence_site_final"
-images_dir = os.path.join(project_dir, "images")
-os.makedirs(images_dir, exist_ok=True)
+# Re-define paths after environment reset
+site_dir = "/mnt/data/la_providence_site_final"
+os.makedirs(site_dir, exist_ok=True)
 
-# HTML final avec tous les éléments professionnels
-html_content = '''<!DOCTYPE html>
+# Save HTML content to index.html
+html_content = """<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>La Providence - Quincaillerie</title>
-  <meta name="description" content="Magasin La Providence - Outils, plomberie, électricité, IoT, Jiprok.">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
-    header { background-color: #004d40; color: white; padding: 30px; text-align: center; }
-    header img { width: 120px; border-radius: 50%; }
-    .section-title { color: #004d40; margin-top: 40px; }
-    .product-card img { height: 200px; object-fit: cover; }
-    footer { background-color: #004d40; color: white; padding: 20px; text-align: center; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      color: #333;
+    }
+    header {
+      background-color: #004d40;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .categorie {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 250px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .categorie img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 400px;
+      margin: auto;
+    }
+    input, textarea {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px;
+      background-color: #004d40;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    footer {
+      background-color: #004d40;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
-
   <header>
-    <img src="images/logo.png" alt="Logo La Providence" />
     <h1>La Providence</h1>
-    <p>Votre magasin de pièces et matériaux de construction à Goma</p>
+    <nav>
+      <ul>
+        <li><a href="#accueil">Accueil</a></li>
+        <li><a href="#produits">Produits</a></li>
+        <li><a href="#apropos">À propos</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <main class="container">
-    <h2 class="section-title text-center">Nos Produits</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col">
-        <div class="card product-card">
-          <img src="images/outils.jpg" class="card-img-top" alt="Outils">
-          <div class="card-body"><h5>Outils</h5><p>Marteaux, tournevis, scies, pinces...</p></div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card product-card">
-          <img src="images/plomberie.jpg" class="card-img-top" alt="Plomberie">
-          <div class="card-body"><h5>Plomberie</h5><p>Tuyaux, robinets, raccords...</p></div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card product-card">
-          <img src="images/electricite.jpg" class="card-img-top" alt="Électricité">
-          <div class="card-body"><h5>Électricité</h5><p>Fils, ampoules, prises, disjoncteurs...</p></div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card product-card">
-          <img src="images/visserie.jpg" class="card-img-top" alt="Visserie">
-          <div class="card-body"><h5>Visserie</h5><p>Vis, clous, boulons...</p></div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card product-card">
-          <img src="images/jiprok.jpg" class="card-img-top" alt="Jiprok">
-          <div class="card-body"><h5>Jiprok</h5><p>Plaques, rails, accessoires pour cloisons sèches.</p></div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card product-card">
-          <img src="images/iot.jpg" class="card-img-top" alt="Maison intelligente">
-          <div class="card-body"><h5>Maison Intelligente (IoT)</h5><p>Capteurs, interrupteurs connectés, caméras WiFi...</p></div>
-        </div>
-      </div>
-    </div>
+  <section id="accueil">
+    <h2>Bienvenue chez La Providence</h2>
+    <p>Votre magasin de confiance pour toutes vos pièces et matériaux de construction.</p>
+  </section>
 
-    <h2 class="section-title text-center">Contact</h2>
-    <div class="text-center">
-      <p><strong>Adresse :</strong> Avenue du marché, Goma ville</p>
-      <p><strong>Email :</strong> <a href="mailto:nynagearsene@gmail.com">nynagearsene@gmail.com</a></p>
-      <p><strong>Téléphones :</strong> +243990240404 / +243847707908</p>
+  <section id="produits">
+    <h2>Nos Produits</h2>
+    <div class="categories">
+      <div class="categorie">
+        <h3>Outils</h3>
+        <img src="images/outils.jpg" alt="Outils">
+        <p>Marteaux, tournevis, scies, etc.</p>
+      </div>
+      <div class="categorie">
+        <h3>Plomberie</h3>
+        <img src="images/plomberie.jpg" alt="Plomberie">
+        <p>Tuyaux, raccords, robinetterie...</p>
+      </div>
+      <div class="categorie">
+        <h3>Électricité</h3>
+        <img src="images/electricite.jpg" alt="Électricité">
+        <p>Fils, ampoules, prises, disjoncteurs...</p>
+      </div>
+      <div class="categorie">
+        <h3>Visserie</h3>
+        <img src="images/visserie.jpg" alt="Visserie">
+        <p>Vis, clous, boulons, chevilles...</p>
+      </div>
+      <div class="categorie">
+        <h3>Jiprok</h3>
+        <img src="images/jiprok.jpg" alt="Jiprok">
+        <p>Planches, supports, profilés...</p>
+      </div>
+      <div class="categorie">
+        <h3>Domotique / IoT</h3>
+        <img src="images/iot.jpg" alt="Domotique">
+        <p>Appareils connectés, interrupteurs intelligents, capteurs de son, capteurs d’image, lustres...</p>
+      </div>
     </div>
-  </main>
+  </section>
+
+  <section id="apropos">
+    <h2>À propos de nous</h2>
+    <p>Depuis notre création, La Providence accompagne les artisans, les bricoleurs et les entreprises avec des matériaux de qualité et des conseils personnalisés.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contactez-nous</h2>
+    <form action="#" method="post">
+      <label for="nom">Nom :</label>
+      <input type="text" id="nom" name="nom" required />
+
+      <label for="email">Email :</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="message">Message :</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+
+      <button type="submit">Envoyer</button>
+    </form>
+    <p>Adresse : Avenue du marché, Goma ville</p>
+    <p>Téléphone : +243990240404 / +243847707908</p>
+    <p>Email : nyangearsene@gmail.com</p>
+  </section>
 
   <footer>
-    <p>&copy; 2025 La Providence - Tous droits réservés</p>
+    <p>&copy; 2025 La Providence - Tous droits réservés.</p>
   </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>'''
-
-# Création du fichier HTML
-index_path = os.path.join(project_dir, "index.html")
-with open(index_path, "w", encoding="utf-8") as f:
+</html>
+"""
+with open(f"{site_dir}/index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
-# Création du fichier ZIP
-zip_path = "/mnt/data/la_providence_final_site.zip"
-with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
-    for foldername, _, filenames in os.walk(project_dir):
+# Create images folder with placeholder image headers
+images_path = f"{site_dir}/images"
+os.makedirs(images_path, exist_ok=True)
+for name in ["outils.jpg", "plomberie.jpg", "electricite.jpg", "visserie.jpg", "jiprok.jpg", "iot.jpg"]:
+    with open(os.path.join(images_path, name), "wb") as img:
+        img.write(b"\xFF\xD8\xFF\xE0")  # JPEG header bytes
+
+# Create ZIP archive
+zip_path = "/mnt/data/la-providence-site-final-updated.zip"
+with ZipFile(zip_path, "w") as zipf:
+    for foldername, subfolders, filenames in os.walk(site_dir):
         for filename in filenames:
-            filepath = os.path.join(foldername, filename)
-            arcname = os.path.relpath(filepath, project_dir)
-            zipf.write(filepath, arcname)
+            file_path = os.path.join(foldername, filename)
+            arcname = os.path.relpath(file_path, site_dir)
+            zipf.write(file_path, arcname)
 
 zip_path
